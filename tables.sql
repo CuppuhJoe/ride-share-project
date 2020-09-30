@@ -22,6 +22,12 @@ create table if not exists "State"
     name         varchar(20) not null
 );
 
+create unique index if not exists state_abbreviation_uindex
+    on "State" (abbreviation);
+
+create unique index if not exists state_name_uindex
+    on "State" (name);
+
 create table if not exists "Driver"
 (
     id              serial      not null
@@ -35,12 +41,6 @@ create table if not exists "Driver"
         constraint "licenseState"
             references "State"
 );
-
-create unique index if not exists state_abbreviation_uindex
-    on "State" (abbreviation);
-
-create unique index if not exists state_name_uindex
-    on "State" (name);
 
 create table if not exists "Location"
 (
@@ -57,24 +57,6 @@ create table if not exists "Location"
     "fuelPrice" double precision not null
 );
 
-create table if not exists "Ride"
-(
-    id               serial           not null
-        constraint ride_pk
-            primary key,
-    date             date             not null,
-    time             time             not null,
-    distance         double precision not null,
-    fee              double precision not null,
-    "vehicleId"      integer          not null,
-    "fromLocationId" integer          not null
-        constraint "fromLocationId"
-            references "Location",
-    "toLocationId"   integer          not null
-        constraint "toLocationId"
-            references "Location"
-);
-
 create table if not exists "Vehicle_Type"
 (
     id   serial      not null
@@ -85,17 +67,76 @@ create table if not exists "Vehicle_Type"
 
 create table if not exists "Vehicle"
 (
-    id              serial           not null
+    id              serial      not null
         constraint vehicle_pk
             primary key,
-    make            varchar(40)      not null,
-    model           varchar(80)      not null,
-    capacity        integer          not null,
-    mpg             double precision not null,
-    "licensePlate"  varchar(10)      not null,
-    "vehicleTypeId" integer
-        constraint vehicle_vehicle_type_id_fk
-            references "Vehicle_Type"
+    make            varchar(40),
+    model           varchar(80) not null,
+    color           varchar(20) not null,
+    "vehicleTypeId" integer     not null
+        constraint vehicletypeid
+            references "Vehicle_Type",
+    capacity        integer     not null,
+    "licenseState"  varchar(2)  not null
+        constraint "licenseState"
+            references "State",
+    "licensePlate"  varchar(10) not null
+);
+
+create table if not exists "Ride"
+(
+    id               serial           not null
+        constraint ride_pk
+            primary key,
+    date             date             not null,
+    time             time             not null,
+    distance         double precision not null,
+    fee              double precision not null,
+    "vehicleId"      integer          not null
+        constraint "vehicleId"
+            references "Vehicle",
+    "fromLocationId" integer          not null
+        constraint "fromLocationId"
+            references "Location",
+    "toLocationId"   integer          not null
+        constraint "toLocationId"
+            references "Location"
+);
+
+create table if not exists "Passenger"
+(
+    "passengerId" integer not null
+        constraint "passengerId"
+            references "User",
+    "rideId"      integer not null
+        constraint "rideId"
+            references "Ride",
+    constraint passenger_pk
+        primary key ("passengerId", "rideId")
+);
+
+create table if not exists "Drivers"
+(
+    "driverId" integer not null
+        constraint "driverId"
+            references "Driver",
+    "rideId"   integer not null
+        constraint "rideId"
+            references "Ride",
+    constraint drivers_pk
+        primary key ("driverId", "rideId")
+);
+
+create table if not exists "Authorization"
+(
+    "driverId"  integer not null
+        constraint "driverId"
+            references "Driver",
+    "vehicleId" integer not null
+        constraint "vehicleId"
+            references "Vehicle",
+    constraint authorization_pk
+        primary key ("driverId", "vehicleId")
 );
 
 
