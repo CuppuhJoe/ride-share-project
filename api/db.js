@@ -8,6 +8,4 @@ const knex = require('knex') ({
 	}
 });
 
-objection = require('objection');
-const Model = objection.Model;
-Model.knex(knex);
+module.exports = knex;

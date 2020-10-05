@@ -1,6 +1,5 @@
 objection=require("objection");
 const Model=objection.Model;
-//Model.knex(knex);
 
 class Driver extends Model{
     static get tableName(){
@@ -21,3 +20,5 @@ class Driver extends Model{
         }
     }
 }
+
+module.exports = Driver;
