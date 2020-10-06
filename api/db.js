@@ -1,3 +1,4 @@
+// Connect knex to the database.
 const knex = require('knex') ({
 	client: 'pg',
 	connection: {
@@ -8,4 +9,8 @@ const knex = require('knex') ({
 	}
 });
 
-module.exports = knex;
+// Connect objection to knex.
+const { Model } = require("objection");
+Model.knex(knex);
+
+module.exports = { knex, Model };

@@ -1,20 +1,11 @@
-const knex = require('../db.js');
-
-const Driver = require('../models/Driver.js');
-Driver.knex(knex);
+const Driver = require("../models/Driver.js");
 
 Driver.query()
-	.then(drivers => {
-		drivers.forEach(thisDriver => {
-			/*
-            if(thisDriver.id == 2) {
-				console.log(thisDriver.licenseNumber);
-			}
-            */
-            console.log(thisDriver.getUser());
-		});
-		knex.destroy();
-	})
-	.catch(err => console.log(err.message));
+  .then((drivers) => {
+    drivers.forEach((driver) => {
+      console.log("DRIVER", driver);
 
-
+      driver.getUser().then((user) => console.log("USER", user));
+    });
+  })
+  .catch((err) => console.log(err.message));
