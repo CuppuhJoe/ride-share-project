@@ -10,7 +10,7 @@ class Ride extends Model {
     const Vehicle = require("./Vehicle.js");
     const Passenger = require("./Passenger.js");
     const Drivers = require("./Drivers.js");
-    
+
     return {
       location: {
         relation: Model.BelongsToOneRelation,

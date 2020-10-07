@@ -46,19 +46,6 @@ class Vehicle extends Model {
       },
     };
   }
-
-  /*
-  getUser() {
-    return this.$relatedQuery("user")
-      .select("firstName")
-      .then((theUser) => {
-        return theUser;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  */
 }
 
 module.exports = Vehicle;

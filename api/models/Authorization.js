@@ -29,6 +29,17 @@ class Authorization extends Model {
       },
     };
   }
+
+  getDriverId() {
+    return this.$relatedQuery("driver")
+      .select("userId")
+      .then((theId) => {
+        return theId;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }
 
 module.exports = Authorization;

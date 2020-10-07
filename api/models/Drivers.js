@@ -7,7 +7,7 @@ class Drivers extends Model {
 
   static get relationMappings() {
     const Driver = require("./Driver.js");
-    const Vehicle = require("./Vehicle.js");
+    const Ride = require("./Ride.js");
     
     return {
       driver: {
@@ -28,6 +28,17 @@ class Drivers extends Model {
         },
       },
     };
+  }
+
+  getDriverId() {
+    return this.$relatedQuery("driver")
+      .select("userId")
+      .then((theId) => {
+        return theId;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 

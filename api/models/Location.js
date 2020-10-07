@@ -33,18 +33,16 @@ class Location extends Model {
     };
   }
 
-  /*
-  getUser() {
-    return this.$relatedQuery("user")
-      .select("firstName")
-      .then((theUser) => {
-        return theUser;
+  getState() {
+    return this.$relatedQuery("state")
+      .select("name")
+      .then((theName) => {
+        return theName;
       })
       .catch((err) => {
         console.log(err);
       });
   }
-  */
 }
 
 module.exports = Location;

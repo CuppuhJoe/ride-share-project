@@ -20,8 +20,7 @@ class Vehicle_Type extends Model {
     };
   }
 
-  /*
-  getUser() {
+  getType() {
     return this.$relatedQuery("user")
       .select("firstName")
       .then((theUser) => {
@@ -30,9 +29,7 @@ class Vehicle_Type extends Model {
       .catch((err) => {
         console.log(err);
       });
-  }
-  */
-}
+  }}
 
 module.exports = Vehicle_Type;
 

@@ -29,6 +29,17 @@ class Passenger extends Model {
       },
     };
   }
+
+  getPassenger() {
+    return this.$relatedQuery("user")
+      .select("firstName")
+      .then((theUser) => {
+        return theUser;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }
 
 module.exports = Passenger;
