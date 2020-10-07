@@ -7,6 +7,7 @@ class Driver extends Model {
 
   static get relationMappings() {
     const User = require("./User.js");
+    const Authorization = require("./Authorization.js");
     return {
       user: {
         relation: Model.BelongsToOneRelation,
@@ -14,6 +15,14 @@ class Driver extends Model {
         join: {
           from: "Driver.userId",
           to: "User.id",
+        },
+      },
+      authorization: {
+        relation: Model.HasManyRelation,
+        modelClass: Authorization,
+        join: {
+          from: "Driver.id",
+          to: "Authorization.driverId",
         },
       },
     };
