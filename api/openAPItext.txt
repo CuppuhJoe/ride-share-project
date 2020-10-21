@@ -1,0 +1,89 @@
+1  Requirements
+
+  Users
+//  1. Retrieve one User or all Users.
+      Optionally fetch any combination of:
+          (a) Authorized Vehicles
+          (b)Rides driven by User
+          (c)Rides on which User is a passenger
+
+  Drivers
+  1. Add, remove User as Driver.
+  2. Add, remove Driver’s authorization for Vehicle.
+  3. Add, remove Driver from Ride.
+
+  Vehicles and Types
+//  1. Retrieve one Vehicle or all Vehicles.
+      Optionally include:
+          (a)Drivers authorized to drive Vehicle.
+          (b)Rides assigned to this Vehicle.
+
+  Rides
+  1. Add, remove User as passenger on Ride.
+//  2. Retrieve one Ride or all Rides. Include details of from and to Location.
+    Optionally include:
+        (a)Drivers per Ride
+        (b)Passengers per Ride
+
+  Locations
+//  1. Retrieve one Location or all Locations.
+      Optionally include:
+          (a) Rides from Location
+          (b) Rides to Location
+  3. Search for Locations that match any combination of name, address, city,
+  state, or zip.
+
+
+2  Guidelines
+Observe the following guidelines in your OpenAPI specification:
+
+  1. Keep the Swagger documentation on OpenAPI at your elbow.
+
+  2. You may write your OpenAPI specification as either a YAML or JSON file.
+
+  3. For endpoints that return optional data, use query parameters. For example,
+  to retrieve Rides from a Location, you might specify a Boolean parameter called
+  from, as in:/locations/42?from=true. To fetch Rides both from and to a
+  Location, use:/locations/42?from=true,to=true.
+
+  4. In one-to-many relationships, add new entities on the “many” side with a
+  Post to an endpoint named for that entity. Include the foreign key to the “one”
+  side in the request body.For example, to designate User42 as a Driver, Post
+  to /drivers with a request body like:{ "userId": 42,"licenseNumber":
+  "ABCXYZ123","licenseState": "IN" }.
+
+  5. For many-to-many relationships, there are
+  various ways to create associations. Consider adding a User to a Ride, which
+  requires creating a Passenger entity. You might:(a) Create a new passengers
+  endpoint and Post to it, passing a request body like the following:{ "userId":
+  17, "rideId": 42 }The Post method is appropriate because we are creating
+  something new: an association between a User and a Ride.(b)Post to a new
+  endpoint that combines a User and a Ride right in the URL. For example:
+  /users/17/rides/42Note that both approaches generalize to associations among
+  more than two entities.
+
+  6. To delete a many-to-many association, it may seem that either approach in
+  item 5 would work: simply send the same information as a Delete request.
+  However, a Delete request isn’t supposed to carry a request body, making
+  option 5a’s approach problematic. Option 5b’s approach is preferable for this
+  reason. To remove the association, send a Delete request to/users/17/rides/42
+
+  7.Distinguish endpoints that deal with a collection resource (e.g., all drivers)
+  from those that deal with individual elements of a collection (e.g., a single
+  driver).
+
+  8. When referring to an element resource, use a path parameter called ‘id’.
+
+  9. An endpoint that creates (Post) or updates (Patch) a resource must include a
+  request body  containing the detailed data for the operation.
+
+  10. A Post endpoint that creates an instance of a resource should never include
+  an ID where the database schema uses a synthetic key (i.e., an automatically
+  incremented integer). The database will itself create the appropriate ID.
+
+  11. A Patch endpoint that updates an element resource should include the resource’s
+  id in the URL (item8) and the request body should contain only the fields to be
+  changed.
+
+  12. Avoid duplicating request bodies, responses, and parameters by abstracting
+  them into components. Use $ref as appropriate throughout your specification.

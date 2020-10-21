@@ -1,0 +1,1106 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Ride Share API",
+		"description": "`API` for **COS 243** Semester Project",
+		"version": "0.1.0"
+	},
+	"tags": [
+		{
+			"name": "user",
+			"description": "Ride Share users"
+		},
+		{
+			"name": "vehicle-type",
+			"description": "Vehicle types"
+		}
+	],
+	"components": {
+		"schemas": {
+			"Error": {
+				"description": "Generic error message",
+				"type": "object",
+				"properties": {
+					"message": { "type": "string" }
+				},
+				"example": {
+					"message": "Something strange happened."
+				}
+			},
+			"User": {
+				"description": "Each user of **Ride Share**",
+				"type": "object",
+				"properties": {
+					"id":			{ "type": "integer" },
+					"firstName":	{ "type": "string" },
+					"lastName":	    { "type": "string" },
+					"email":		{ "type": "string" },
+					"password":	    { "type": "string" },
+					"phone":		{ "type": "string" },
+					"isAdmin":		{ "type": "boolean" }
+				},
+				"example": {
+					"id":			42,
+					"firstName":	"Fred",
+					"lastName":	    "Ziffle",
+					"email":		"fred@example.com",
+					"password":	    "super-secret-thing",
+					"phone":		"765-555-1212",
+					"isAdmin":		false
+				}
+			},
+			"VehicleType": {
+				"description": "Type of a vehicle",
+				"type": "object",
+				"properties": {
+					"id":			{ "type": "integer" },
+					"vehicleType":	{ "type": "string" }
+				},
+				"example": {
+					"id": 42,
+					"type": "Pickup Truck"
+				}
+		},
+			"Driver": {
+			"description": "A User registered as a driver",
+			"type": "object",
+			"properties": {
+				"id":				{ "type": "integer" },
+				"userId":			{ "type": "integer" },
+				"licenseNumber":	{ "type": "string" },
+				"licenseState":	    { "type": "string" }
+			},
+			"example": {
+				"id": 89,
+				"userId": 42,
+				"licenseNumber": 1019,
+				"licenseState": "MI"
+			}
+	},
+			"Ride": {
+		"description": "A ride with one or more drivers and passengers",
+		"type": "object",
+		"properties": {
+			"id":				{ "type": "integer" },
+			"date":				{ "type": "date" },
+			"time":				{ "type": "time" },
+			"distance":			{ "type": "float" },
+			"fee":				{ "type": "float" },
+			"vehicleId":		{ "type": "integer" },
+			"fromLocationId":	{ "type": "integer" },
+			"toLocationId":		{ "type": "integer" }
+		},
+		"example": {
+			"id": 2,
+			"date": 11-11-2011,
+			"time": 11:11PM,
+			"distance": 111.11,
+			"fee": 0.0,
+			"vehicleId": 74,
+			"fromLocationId": 6,
+			"toLocationId": 7
+		}
+},
+			"Vehicle": {
+  			"description": "Individual vehicle",
+  			"type": "object",
+  			"properties": {
+  					"id":			   { "type": "integer" },
+  					"make":			   { "type": "string" },
+  					"model":		   { "type": "string" },
+  					"color":		   { "type": "string" },
+  					"vehicleTypeId":   { "type": "integer" },
+  					"capacity":		   { "type": "integer" },
+  					"mpg":			   { "type": "float" },
+  					"licenseState":	   { "type": "string" },
+  					"licensePlate":	   { "type": "string" }
+  			},
+  			"example": {
+  				"id":					42,
+  				"make":					"Ford",
+  				"model":				"Excursion",
+  				"color":				"white",
+  				"vehicleTypeId":		1,
+  				"capacity":				2,
+  				"mpg":					0.49,
+  				"licenseState":		    "CA",
+  				"licensePlate":		    "G3N1515"
+  			}
+  		},
+			"Location": {
+					"description": "Either a beginning or ending location",
+					"type": "object",
+					"properties": {
+							"id":		 { "type": "integer" },
+							"name":		 { "type": "string" },
+							"address":	 { "type": "string" },
+							"city":		 { "type": "string" },
+							"state":	 { "type": "string" },
+							"zipCode":	 { "type": "string" },
+							"fuelPrice": { "type": "float" }
+					},
+					"example": {
+							"id":		 5,
+							"name":		 "Home",
+							"address":	 "123 Sharpp Rd.",
+							"city":		 "Pencilsville",
+							"state":	 "PA",
+							"zipCode":	 "34676",
+							"fuelPrice": 3.1415
+					}
+				}
+		}
+	},
+	"paths": {
+		"/users": {
+			"summary": "Operations on users",
+			"get": {
+				"summary": "Get all users",
+				"tags": ["user"],
+				"responses": {
+					"200": {
+						"description": "All users fetched successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/User"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+            "description": "Could not get users",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "Could not get users"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"summary": "Create a new user",
+				"tags": ["user"],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/User"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Created sucessfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"userId": {
+											"type": "integer"
+										}
+									},
+									"example": {
+										"userId": 42
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Not created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "Duplicate email address"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{id}": {
+			"summary": "Operations on a single user",
+			"get": {
+				"summary": "Get user by ID",
+				"tags": ["user"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"description": "ID of user to fetch",
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully retrieved",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/User"
+								}
+							}
+						}
+					},
+					"400": {
+            "description": "User not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such user"
+								}
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"summary": "Update an existing user",
+				"tags": ["user"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"requestBody": {
+					"description": "Updated user",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+        					"firstName":	{ "type": "string" },
+        					"lastName":	 { "type": "string" },
+        					"email":			{ "type": "string" },
+        					"password":	 { "type": "string" },
+        					"phone":			{ "type": "string" },
+        					"isAdmin":		{ "type": "boolean" }
+								},
+								"example": {
+        					"firstName":	"Fred",
+        					"lastName":	 "Ziffle",
+        					"email":			"fred@example.com",
+        					"password":	 "super-secret-thing",
+        					"phone":			"765-555-1212",
+        					"isAdmin":		false
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/User"
+								}
+							}
+						}
+					},
+					"400": {
+            "description": "No such user ID",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such user ID"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/vehicles": {
+			"summary": "Operations on vehicles",
+			"post": {
+				"summary": "Create a new vehicle.",
+				"description": "A new, specific vehicle.",
+				"tags": ["vehicle"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"make":					 { "type": "string" },
+									"model":					{ "type": "string" },
+									"color":					{ "type": "string" },
+									"vehicleTypeId":	{ "type": "integer" },
+									"capacity":			 { "type": "integer" },
+									"mpg":						{ "type": "float" },
+									"licenseState":	 { "type": "string" },
+									"licensePlate":	 { "type": "string" }
+								},
+								"example": {
+									"make":						 "Ford",
+									"model":						"Excursion",
+									"color":						"white",
+									"vehicleTypeId":		1,
+									"capacity":				 2,
+									"mpg":							0.49,
+									"licenseState":		 "CA",
+									"licensePlate":		 "G3N1515"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "New vehicle created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Vehicle"
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"summary": "Retrieve all vehicles",
+				"tags": ["vehicle"],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Vehicle"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/vehicles/{id}": {
+			"summary": "Operations on a single specified vehicle",
+			"get": {
+				"summary": "Retrieve one specific vehicle",
+				"tags": ["vehicle"],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+											"make":					 { "type": "string" },
+											"model":					{ "type": "string" },
+											"color":					{ "type": "string" },
+											"vehicleTypeId":	{ "type": "integer" },
+											"capacity":			 { "type": "integer" },
+											"mpg":						{ "type": "float" },
+											"licenseState":	 { "type": "string" },
+											"licensePlate":	 { "type": "string" }
+									},
+									"example": {
+										"make":						 "Ford",
+										"model":						"Excursion",
+										"color":						"white",
+										"vehicleTypeId":		1,
+										"capacity":				 2,
+										"mpg":							0.49,
+										"licenseState":		 "CA",
+										"licensePlate":		 "G3N1515"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"summary": "Update an existing vehicle",
+				"tags": ["vehicle"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"requestBody": {
+					"description": "Updated vehicle",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"make":					 { "type": "string" },
+									"model":					{ "type": "string" },
+									"color":					{ "type": "string" },
+									"vehicleTypeId":	{ "type": "integer" },
+									"capacity":			 { "type": "integer" },
+									"mpg":						{ "type": "float" },
+									"licenseState":	 { "type": "string" },
+									"licensePlate":	 { "type": "string" }
+                },
+								"example": {
+									"make":						 "Ford",
+									"model":						"Excursion",
+									"color":						"white",
+									"vehicleTypeId":		1,
+									"capacity":				 2,
+									"mpg":							0.49,
+									"licenseState":		 "CA",
+									"licensePlate":		 "G3N1515"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Vehicle"
+								}
+							}
+						}
+					},
+          "400": {
+            "description": "Vehicle not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Vehicle not found"
+                }
+              }
+            }
+          }
+				}
+			},
+			"delete": {
+				"summary": "Delete an existing vehicle",
+				"tags": ["vehicle"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Vehicle deleted"
+					},
+          "400": {
+            "description": "Vehicle not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Vehicle not found"
+                }
+              }
+            }
+          }
+				}
+			}
+	},
+		"/vehicle-types": {
+			"summary": "Operations on vehicle types",
+			"post": {
+				"summary": "Create a new vehicle type.",
+				"description": "_Each_ vehicle in **Ride Share** has a `type`, making it easier for riders to identify the vehicle.",
+				"tags": ["vehicle-type"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"vehicleType": { "type": "string" }
+								},
+								"example": {
+									"vehicleType": "Pickup Truck"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "New vehicle type created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/VehicleType"
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"summary": "Retrieve all vehicle types",
+				"tags": ["vehicle-type"],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/VehicleType"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/vehicle-types/{id}": {
+			"summary": "Operations on a single vehicle type",
+			"patch": {
+				"summary": "Update an existing vehicle type",
+				"tags": ["vehicle-type"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"requestBody": {
+					"description": "Updated vehicle type",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"vehicleType": { "type": "string" }
+								},
+								"example": {
+									"vehicleType": "SUV"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/VehicleType"
+								}
+							}
+						}
+					},
+					"400": {
+            "description": "No such vehicle ID",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such vehicle ID"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete an existing vehicle type",
+				"tags": ["vehicle-type"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Vehicle deleted"
+					},
+					"400": {
+            "description": "Can't delete vehicle",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "Can't delete vehicle"
+								}
+							}
+						}
+					}
+				}
+			}
+	},
+		"/locations": {
+			"summary": "Operations on locations",
+			"post": {
+				"summary": "Create a new location.",
+				"description": "_Each_ location in **Ride Share** has a `name`, making it easier for riders to identify the location.",
+				"tags": ["location"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+										"name":			 { "type": "string" },
+										"address":		{ "type": "string" },
+										"city":			 { "type": "string" },
+										"state":			{ "type": "string" },
+										"zipCode":		{ "type": "string" },
+										"fuelPrice":	{ "type": "float" }
+									},
+								"example": {
+										"name":			 "Home",
+										"address":		"123 Sharpp Rd.",
+										"city":			 "Pencilsville",
+										"state":			"PA",
+										"zipCode":		"34676",
+										"fuelPrice":	3.1415
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "New location created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Location"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "New location creation attempt failed",
+						"content": {
+								"application/json": {
+									"schema": {
+										"$ref": "#/components/schemas/Error"
+									},
+									"example": {
+										"message": "Nondescript error"
+									}
+								}
+							}
+					}
+				}
+			},
+			"get": {
+				"summary": "Retrieve all locations",
+				"tags": ["location"],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Location"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Failed retrieval",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "Nondescript error"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/locations/{id}": {
+				"summary": "Operations on a single location",
+				"get": {
+					"summary": "Get location by ID",
+					"tags": ["location"],
+					"parameters": [
+						{
+							"name": "id",
+							"in": "path",
+							"required": true,
+							"description": "ID of location to fetch",
+							"schema": {
+								"type": "integer"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "Successfully retrieved",
+							"content": {
+								"application/json": {
+									"schema": {
+										"$ref": "#/components/schemas/Location"
+									}
+								}
+							}
+						},
+  					"400": {
+              "description": "Location not found",
+  						"content": {
+  							"application/json": {
+  								"schema": {
+  									"$ref": "#/components/schemas/Error"
+  								},
+  								"example": {
+  									"message": "Location not found"
+  								}
+  							}
+  						}
+  					}
+					}
+				},
+				"patch": {
+					"summary": "Update an existing location",
+					"tags": ["location"],
+					"parameters": [
+						{
+							"name": "id",
+							"in": "path",
+							"schema": { "type": "integer" },
+							"required": true
+						}
+					],
+					"requestBody": {
+						"description": "Updated location",
+						"required": true,
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"name":			 { "type": "string" },
+										"address":		{ "type": "string" },
+										"city":			 { "type": "string" },
+										"state":			{ "type": "string" },
+										"zipCode":		{ "type": "string" },
+										"fuelPrice":	{ "type": "float" }
+									},
+									"example": {
+										"name":			 "Home",
+										"address":		"123 Sharpp Rd.",
+										"city":			 "Pencilsville",
+										"state":			"PA",
+										"zipCode":		"34676",
+										"fuelPrice":	3.1415
+									}
+								}
+							}
+						}
+					},
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"$ref": "#/components/schemas/Location"
+									}
+								}
+							}
+						},
+  					"400": {
+              "description": "Location not found",
+  						"content": {
+  							"application/json": {
+  								"schema": {
+  									"$ref": "#/components/schemas/Error"
+  								},
+  								"example": {
+  									"message": "Location not found"
+  								}
+  							}
+  						}
+  					}
+					}
+				}
+		},
+		"/rides": {
+			"summary": "Operations on rides",
+			"post": {
+				"summary": "Create a new ride.",
+				"description": "A new, specific ride.",
+				"tags": ["ride"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"date":			       { "type": "date" },
+									"time":			       { "type": "time" },
+									"distance":       { "type": "float" },
+									"fee":			      { "type": "float" },
+									"vehicleId":	    { "type": "integer" },
+									"fromLocationId": { "type": "integer" },
+									"toLocationId":	  { "type": "integer" }
+								},
+								"example": {
+            			"date": 11-11-2011,
+            			"time": 11:11PM,
+            			"distance": 111.11,
+            			"fee": 0.0,
+            			"vehicleId": 74,
+            			"fromLocationId": 6,
+            			"toLocationId": 7
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "New ride created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Ride"
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"summary": "Retrieve all vehicles",
+				"tags": ["ride"],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Ride"
+									}
+								}
+							}
+						}
+					},
+                    "400": {
+                        "description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Ride"
+									}
+								}
+							}
+						}
+                    }
+				}
+			}
+		},
+		"/rides/{id}": {
+			"summary": "Operations on a single ride",
+            "get": {
+                "summary": "Get ride by ID",
+                "tags": ["ride"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of ride to fetch",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ride"
+                                }
+                            }
+                        }
+                    },
+                "400": {
+          "description": "Location not found",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Error"
+                            },
+                            "example": {
+                                "message": "Ride not found"
+                            }
+                        }
+                    }
+                }
+                }
+            },
+			"patch": {
+				"summary": "Update an existing ride",
+				"tags": ["ride"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"requestBody": {
+					"description": "Updated ride",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+            			"date":				{ "type": "date" },
+            			"time":				{ "type": "time" },
+            			"distance":			{ "type": "float" },
+            			"fee":				{ "type": "float" },
+            			"vehicleId":		{ "type": "integer" },
+            			"fromLocationId":	{ "type": "integer" },
+            			"toLocationId":		{ "type": "integer" }
+								},
+								"example": {
+			            "date":              11-11-2011,
+			            "time":              11:11PM,
+			            "distance":          111.11,
+			            "fee":               0.0,
+			            "vehicleId":         74,
+			            "fromLocationId":    6,
+			            "toLocationId":      7
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Ride"
+								}
+							}
+						}
+					},
+					"400": {
+            "description": "No such ride ID",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such ride ID"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete an existing ride",
+				"tags": ["ride"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Ride deleted"
+					},
+					"400": {
+            "description": "Can't delete ride",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such ride ID"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
