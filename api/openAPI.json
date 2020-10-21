@@ -82,18 +82,18 @@
 		"type": "object",
 		"properties": {
 			"id":				{ "type": "integer" },
-			"date":				{ "type": "date" },
-			"time":				{ "type": "time" },
-			"distance":			{ "type": "float" },
-			"fee":				{ "type": "float" },
+			"date":				{ "type": "object" },
+			"time":				{ "type": "object" },
+			"distance":			{ "type": "number" },
+			"fee":				{ "type": "number" },
 			"vehicleId":		{ "type": "integer" },
 			"fromLocationId":	{ "type": "integer" },
 			"toLocationId":		{ "type": "integer" }
 		},
 		"example": {
 			"id": 2,
-			"date": 11-11-2011,
-			"time": 11:11PM,
+			"date": "11-11-2011",
+			"time": "11:11PM",
 			"distance": 111.11,
 			"fee": 0.0,
 			"vehicleId": 74,
@@ -111,7 +111,7 @@
   					"color":		   { "type": "string" },
   					"vehicleTypeId":   { "type": "integer" },
   					"capacity":		   { "type": "integer" },
-  					"mpg":			   { "type": "float" },
+  					"mpg":			   { "type": "number" },
   					"licenseState":	   { "type": "string" },
   					"licensePlate":	   { "type": "string" }
   			},
@@ -137,7 +137,7 @@
 							"city":		 { "type": "string" },
 							"state":	 { "type": "string" },
 							"zipCode":	 { "type": "string" },
-							"fuelPrice": { "type": "float" }
+							"fuelPrice": { "type": "number" }
 					},
 					"example": {
 							"id":		 5,
@@ -171,15 +171,15 @@
 							}
 						}
 					},
-					"400": {
-            "description": "Could not get users",
+					"404": {
+            			"description": "Could not get users",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/Error"
 								},
 								"example": {
-									"message": "Could not get users"
+									"message": "Requested resource not found"
 								}
 							}
 						}
@@ -194,7 +194,23 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/User"
+								"type": "object",
+								"properties": {
+									"firstName":	{ "type": "string" },
+									"lastName":	    { "type": "string" },
+									"email":		{ "type": "string" },
+									"password":	    { "type": "string" },
+									"phone":		{ "type": "string" },
+									"isAdmin":		{ "type": "boolean" }
+								},
+								"example": {
+									"firstName":	"Fred",
+									"lastName":	    "Ziffle",
+									"email":		"fred@example.com",
+									"password":	    "super-secret-thing",
+									"phone":		"765-555-1212",
+									"isAdmin":		false
+								}
 							}
 						}
 					}
@@ -218,7 +234,7 @@
 							}
 						}
 					},
-					"400": {
+					"404": {
 						"description": "Not created",
 						"content": {
 							"application/json": {
@@ -226,7 +242,7 @@
 									"$ref": "#/components/schemas/Error"
 								},
 								"example": {
-									"message": "Duplicate email address"
+									"message": "Requested resource not found"
 								}
 							}
 						}
@@ -261,15 +277,15 @@
 							}
 						}
 					},
-					"400": {
-            "description": "User not found",
+					"404": {
+            			"description": "User not found",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/Error"
 								},
 								"example": {
-									"message": "No such user"
+									"message": "Requested resource not found"
 								}
 							}
 						}
@@ -325,8 +341,8 @@
 							}
 						}
 					},
-					"400": {
-            "description": "No such user ID",
+					"404": {
+            			"description": "No such user ID",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -353,31 +369,31 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"make":					 { "type": "string" },
-									"model":					{ "type": "string" },
-									"color":					{ "type": "string" },
-									"vehicleTypeId":	{ "type": "integer" },
-									"capacity":			 { "type": "integer" },
-									"mpg":						{ "type": "float" },
-									"licenseState":	 { "type": "string" },
-									"licensePlate":	 { "type": "string" }
+									"make":				 	{ "type": "string" },
+									"model":				{ "type": "string" },
+									"color":				{ "type": "string" },
+									"vehicleTypeId":		{ "type": "integer" },
+									"capacity":			 	{ "type": "integer" },
+									"mpg":					{ "type": "number" },
+									"licenseState":	 		{ "type": "string" },
+									"licensePlate":	 		{ "type": "string" }
 								},
 								"example": {
-									"make":						 "Ford",
-									"model":						"Excursion",
-									"color":						"white",
+									"make":					"Ford",
+									"model":				"Excursion",
+									"color":				"white",
 									"vehicleTypeId":		1,
-									"capacity":				 2,
-									"mpg":							0.49,
-									"licenseState":		 "CA",
-									"licensePlate":		 "G3N1515"
+									"capacity":				2,
+									"mpg":					0.49,
+									"licenseState":		 	"CA",
+									"licensePlate":		 	"G3N1515"
 								}
 							}
 						}
 					}
 				},
 				"responses": {
-					"200": {
+					"201": {
 						"description": "New vehicle created",
 						"content": {
 							"application/json": {
@@ -422,24 +438,24 @@
 								"schema": {
 									"type": "object",
 									"properties": {
-											"make":					 { "type": "string" },
-											"model":					{ "type": "string" },
-											"color":					{ "type": "string" },
-											"vehicleTypeId":	{ "type": "integer" },
-											"capacity":			 { "type": "integer" },
-											"mpg":						{ "type": "float" },
-											"licenseState":	 { "type": "string" },
-											"licensePlate":	 { "type": "string" }
+										"make":				{ "type": "string" },
+										"model":			{ "type": "string" },
+										"color":			{ "type": "string" },
+										"vehicleTypeId":	{ "type": "integer" },
+										"capacity":			{ "type": "integer" },
+										"mpg":				{ "type": "number" },
+										"licenseState":	 	{ "type": "string" },
+										"licensePlate":		{ "type": "string" }
 									},
 									"example": {
-										"make":						 "Ford",
-										"model":						"Excursion",
-										"color":						"white",
-										"vehicleTypeId":		1,
-										"capacity":				 2,
-										"mpg":							0.49,
-										"licenseState":		 "CA",
-										"licensePlate":		 "G3N1515"
+										"make":				"Ford",
+										"model":			"Excursion",
+										"color":			"white",
+										"vehicleTypeId":	1,
+										"capacity":			2,
+										"mpg":				0.49,
+										"licenseState":		"CA",
+										"licensePlate":		"G3N1515"
 									}
 								}
 							}
@@ -466,24 +482,24 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"make":					 { "type": "string" },
-									"model":					{ "type": "string" },
-									"color":					{ "type": "string" },
-									"vehicleTypeId":	{ "type": "integer" },
-									"capacity":			 { "type": "integer" },
-									"mpg":						{ "type": "float" },
-									"licenseState":	 { "type": "string" },
-									"licensePlate":	 { "type": "string" }
+									"make":					{ "type": "string" },
+									"model":				{ "type": "string" },
+									"color":				{ "type": "string" },
+									"vehicleTypeId":		{ "type": "integer" },
+									"capacity":				{ "type": "integer" },
+									"mpg":					{ "type": "number" },
+									"licenseState":	 		{ "type": "string" },
+									"licensePlate":	 		{ "type": "string" }
                 },
 								"example": {
-									"make":						 "Ford",
-									"model":						"Excursion",
-									"color":						"white",
+									"make":					"Ford",
+									"model":				"Excursion",
+									"color":				"white",
 									"vehicleTypeId":		1,
-									"capacity":				 2,
-									"mpg":							0.49,
-									"licenseState":		 "CA",
-									"licensePlate":		 "G3N1515"
+									"capacity":				2,
+									"mpg":					0.49,
+									"licenseState":		 	"CA",
+									"licensePlate":		 	"G3N1515"
 								}
 							}
 						}
@@ -500,19 +516,19 @@
 							}
 						}
 					},
-          "400": {
-            "description": "Vehicle not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": {
-                  "message": "Vehicle not found"
-                }
-              }
-            }
-          }
+					"404": {
+						"description": "Vehicle not found",
+						"content": {
+							"application/json": {
+								"schema": {
+								"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+								"message": "Vehicle not found"
+								}
+							}
+						}
+					}
 				}
 			},
 			"delete": {
@@ -530,19 +546,19 @@
 					"200": {
 						"description": "Vehicle deleted"
 					},
-          "400": {
-            "description": "Vehicle not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": {
-                  "message": "Vehicle not found"
-                }
-              }
-            }
-          }
+					"404": {
+						"description": "Vehicle not found",
+						"content": {
+							"application/json": {
+								"schema": {
+								"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+								"message": "Vehicle not found"
+								}
+							}
+						}
+					}
 				}
 			}
 	},
@@ -568,12 +584,18 @@
 					}
 				},
 				"responses": {
-					"200": {
+					"201": {
 						"description": "New vehicle type created",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/VehicleType"
+									"type": "object",
+									"properties": {
+										"vehicleType":	{ "type": "string" }
+									},
+									"example": {
+										"type": "Pickup Truck"
+									}
 								}
 							}
 						}
@@ -641,8 +663,8 @@
 							}
 						}
 					},
-					"400": {
-            "description": "No such vehicle ID",
+					"404": {
+            			"description": "No such vehicle ID",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -671,8 +693,8 @@
 					"200": {
 						"description": "Vehicle deleted"
 					},
-					"400": {
-            "description": "Can't delete vehicle",
+					"404": {
+            			"description": "Can't delete vehicle",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -704,7 +726,7 @@
 										"city":			 { "type": "string" },
 										"state":			{ "type": "string" },
 										"zipCode":		{ "type": "string" },
-										"fuelPrice":	{ "type": "float" }
+										"fuelPrice":	{ "type": "number" }
 									},
 								"example": {
 										"name":			 "Home",
@@ -719,7 +741,7 @@
 					}
 				},
 				"responses": {
-					"200": {
+					"201": {
 						"description": "New location created",
 						"content": {
 							"application/json": {
@@ -729,7 +751,7 @@
 							}
 						}
 					},
-					"400": {
+					"404": {
 						"description": "New location creation attempt failed",
 						"content": {
 								"application/json": {
@@ -737,7 +759,7 @@
 										"$ref": "#/components/schemas/Error"
 									},
 									"example": {
-										"message": "Nondescript error"
+										"message": "Requested resource not found"
 									}
 								}
 							}
@@ -761,7 +783,7 @@
 							}
 						}
 					},
-					"400": {
+					"404": {
 						"description": "Failed retrieval",
 						"content": {
 							"application/json": {
@@ -769,7 +791,7 @@
 									"$ref": "#/components/schemas/Error"
 								},
 								"example": {
-									"message": "Nondescript error"
+									"message": "Requested resource not found"
 								}
 							}
 						}
@@ -804,19 +826,19 @@
 								}
 							}
 						},
-  					"400": {
-              "description": "Location not found",
-  						"content": {
-  							"application/json": {
-  								"schema": {
-  									"$ref": "#/components/schemas/Error"
-  								},
-  								"example": {
-  									"message": "Location not found"
-  								}
-  							}
-  						}
-  					}
+						"404": {
+							"description": "Location not found",
+							"content": {
+								"application/json": {
+									"schema": {
+										"$ref": "#/components/schemas/Error"
+									},
+									"example": {
+										"message": "Location not found"
+									}
+								}
+							}
+						}
 					}
 				},
 				"patch": {
@@ -843,7 +865,7 @@
 										"city":			 { "type": "string" },
 										"state":			{ "type": "string" },
 										"zipCode":		{ "type": "string" },
-										"fuelPrice":	{ "type": "float" }
+										"fuelPrice":	{ "type": "number" }
 									},
 									"example": {
 										"name":			 "Home",
@@ -868,19 +890,19 @@
 								}
 							}
 						},
-  					"400": {
-              "description": "Location not found",
-  						"content": {
-  							"application/json": {
-  								"schema": {
-  									"$ref": "#/components/schemas/Error"
-  								},
-  								"example": {
-  									"message": "Location not found"
-  								}
-  							}
-  						}
-  					}
+						"404": {
+							"description": "Location not found",
+							"content": {
+								"application/json": {
+									"schema": {
+										"$ref": "#/components/schemas/Error"
+									},
+									"example": {
+										"message": "Location not found"
+									}
+								}
+							}
+						}
 					}
 				}
 		},
@@ -896,34 +918,47 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"date":			       { "type": "date" },
-									"time":			       { "type": "time" },
-									"distance":       { "type": "float" },
-									"fee":			      { "type": "float" },
+									"date":			       { "type": "object" },
+									"time":			       { "type": "object" },
+									"distance":       { "type": "number" },
+									"fee":			      { "type": "number" },
 									"vehicleId":	    { "type": "integer" },
 									"fromLocationId": { "type": "integer" },
 									"toLocationId":	  { "type": "integer" }
 								},
 								"example": {
-            			"date": 11-11-2011,
-            			"time": 11:11PM,
-            			"distance": 111.11,
-            			"fee": 0.0,
-            			"vehicleId": 74,
-            			"fromLocationId": 6,
-            			"toLocationId": 7
+									"date": "11-11-2011",
+									"time": "11:11PM",
+									"distance": 111.11,
+									"fee": 0.0,
+									"vehicleId": 74,
+									"fromLocationId": 6,
+									"toLocationId": 7
 								}
 							}
 						}
 					}
 				},
 				"responses": {
-					"200": {
+					"201": {
 						"description": "New ride created",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/Ride"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Unable to create new ride",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "Unable to create new ride"
 								}
 							}
 						}
@@ -947,19 +982,19 @@
 							}
 						}
 					},
-                    "400": {
-                        "description": "OK",
+					"404": {
+						"description": "Unable to retrieve rides",
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/Ride"
-									}
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "Unable to retrieve rides"
 								}
 							}
 						}
-                    }
+					}
 				}
 			}
 		},
@@ -990,8 +1025,8 @@
                             }
                         }
                     },
-                "400": {
-          "description": "Location not found",
+                "404": {
+          			"description": "Ride not found",
                     "content": {
                         "application/json": {
                             "schema": {
@@ -1024,17 +1059,17 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-            			"date":				{ "type": "date" },
-            			"time":				{ "type": "time" },
-            			"distance":			{ "type": "float" },
-            			"fee":				{ "type": "float" },
+            			"date":				{ "type": "object" },
+            			"time":				{ "type": "object" },
+            			"distance":			{ "type": "number" },
+            			"fee":				{ "type": "number" },
             			"vehicleId":		{ "type": "integer" },
             			"fromLocationId":	{ "type": "integer" },
             			"toLocationId":		{ "type": "integer" }
 								},
 								"example": {
-			            "date":              11-11-2011,
-			            "time":              11:11PM,
+			            "date":              "11-11-2011",
+			            "time":              "11:11PM",
 			            "distance":          111.11,
 			            "fee":               0.0,
 			            "vehicleId":         74,
@@ -1056,8 +1091,8 @@
 							}
 						}
 					},
-					"400": {
-            "description": "No such ride ID",
+					"404": {
+            			"description": "No such ride ID",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -1086,8 +1121,8 @@
 					"200": {
 						"description": "Ride deleted"
 					},
-					"400": {
-            "description": "Can't delete ride",
+					"404": {
+            			"description": "Can't delete ride",
 						"content": {
 							"application/json": {
 								"schema": {
