@@ -62,45 +62,45 @@
 				}
 		},
 			"Driver": {
-			"description": "A User registered as a driver",
-			"type": "object",
-			"properties": {
-				"id":				{ "type": "integer" },
-				"userId":			{ "type": "integer" },
-				"licenseNumber":	{ "type": "string" },
-				"licenseState":	    { "type": "string" }
-			},
-			"example": {
-				"id": 89,
-				"userId": 42,
-				"licenseNumber": 1019,
-				"licenseState": "MI"
-			}
-	},
-			"Ride": {
-		"description": "A ride with one or more drivers and passengers",
-		"type": "object",
-		"properties": {
-			"id":				{ "type": "integer" },
-			"date":				{ "type": "object" },
-			"time":				{ "type": "object" },
-			"distance":			{ "type": "number" },
-			"fee":				{ "type": "number" },
-			"vehicleId":		{ "type": "integer" },
-			"fromLocationId":	{ "type": "integer" },
-			"toLocationId":		{ "type": "integer" }
+				"description": "A User registered as a driver",
+				"type": "object",
+				"properties": {
+					"id":				{ "type": "integer" },
+					"userId":			{ "type": "integer" },
+					"licenseNumber":	{ "type": "string" },
+					"licenseState":	    { "type": "string" }
+				},
+				"example": {
+					"id": 89,
+					"userId": 42,
+					"licenseNumber": 1019,
+					"licenseState": "MI"
+				}
 		},
-		"example": {
-			"id": 2,
-			"date": "11-11-2011",
-			"time": "11:11PM",
-			"distance": 111.11,
-			"fee": 0.0,
-			"vehicleId": 74,
-			"fromLocationId": 6,
-			"toLocationId": 7
-		}
-},
+			"Ride": {
+				"description": "A ride with one or more drivers and passengers",
+				"type": "object",
+				"properties": {
+					"id":				{ "type": "integer" },
+					"date":				{ "type": "object" },
+					"time":				{ "type": "object" },
+					"distance":			{ "type": "number" },
+					"fee":				{ "type": "number" },
+					"vehicleId":		{ "type": "integer" },
+					"fromLocationId":	{ "type": "integer" },
+					"toLocationId":		{ "type": "integer" }
+				},
+				"example": {
+					"id": 2,
+					"date": "11-11-2011",
+					"time": "11:11PM",
+					"distance": 111.11,
+					"fee": 0.0,
+					"vehicleId": 74,
+					"fromLocationId": 6,
+					"toLocationId": 7
+				}
+			},
 			"Vehicle": {
   			"description": "Individual vehicle",
   			"type": "object",
@@ -148,7 +148,43 @@
 							"zipCode":	 "34676",
 							"fuelPrice": 3.1415
 					}
+				},
+			"User-Ride": {
+				"description": "A user's connection to a given ride",
+				"type": "object",
+				"properties": {
+					"userId":				{ "type": "integer" },
+					"rideId":				{ "type": "integer" }
+				},
+				"example": {
+					"userId": 2,
+					"rideId": 2
 				}
+			},
+			"Driver-Vehicle": {
+				"description": "A driver's connection to a given vehicle",
+				"type": "object",
+				"properties": {
+					"driverId":				{ "type": "integer" },
+					"vehicleId":				{ "type": "integer" }
+				},
+				"example": {
+					"driverId": 3,
+					"vehicleId": 3
+				}
+			},
+			"Driver-Ride": {
+				"description": "A driver's connection to a given ride",
+				"type": "object",
+				"properties": {
+					"driverId":				{ "type": "integer" },
+					"rideId":				{ "type": "integer" }
+				},
+				"example": {
+					"driverId": 4,
+					"rideId": 4
+				}
+			}
 		}
 	},
 	"paths": {
@@ -223,12 +259,20 @@
 								"schema": {
 									"type": "object",
 									"properties": {
-										"userId": {
-											"type": "integer"
-										}
+										"firstName":	{ "type": "string" },
+										"lastName":	    { "type": "string" },
+										"email":		{ "type": "string" },
+										"password":	    { "type": "string" },
+										"phone":		{ "type": "string" },
+										"isAdmin":		{ "type": "boolean" }
 									},
 									"example": {
-										"userId": 42
+										"firstName":	"Fred",
+										"lastName":	    "Ziffle",
+										"email":		"fred@example.com",
+										"password":	    "super-secret-thing",
+										"phone":		"765-555-1212",
+										"isAdmin":		false
 									}
 								}
 							}
@@ -709,7 +753,104 @@
 				}
 			}
 	},
-		"/locations": {
+		"/drivers": {
+			"summary": "Operations on drivers",
+			"post": {
+				"summary": "Create a new driver",
+				"tags": ["driver"],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id":				{ "type": "integer" },
+									"userId":			{ "type": "integer" },
+									"licenseNumber":	{ "type": "string" },
+									"licenseState":	    { "type": "string" }
+								},
+								"example": {
+									"id": 				89,
+									"userId": 			42,
+									"licenseNumber": 	1019,
+									"licenseState": 	"MI"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Created sucessfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"userId":			{ "type": "integer" },
+										"licenseNumber":	{ "type": "string" },
+										"licenseState":	    { "type": "string" }
+									},
+									"example": {
+										"userId": 			42,
+										"licenseNumber": 	1019,
+										"licenseState": 	"MI"
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "Requested resource not found"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/drivers/{id}": {
+			"summary": "Operations on a single driver",
+			"delete": {
+				"summary": "Delete an existing driver",
+				"tags": ["driver"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Driver deleted"
+					},
+					"404": {
+      			"description": "Can't delete driver",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such driver ID"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/locations{?zipCode}": {
 			"summary": "Operations on locations",
 			"post": {
 				"summary": "Create a new location.",
@@ -721,18 +862,18 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-										"name":			 { "type": "string" },
+										"name":			{ "type": "string" },
 										"address":		{ "type": "string" },
-										"city":			 { "type": "string" },
-										"state":			{ "type": "string" },
+										"city":			{ "type": "string" },
+										"state":		{ "type": "string" },
 										"zipCode":		{ "type": "string" },
 										"fuelPrice":	{ "type": "number" }
 									},
 								"example": {
-										"name":			 "Home",
+										"name":			"Home",
 										"address":		"123 Sharpp Rd.",
-										"city":			 "Pencilsville",
-										"state":			"PA",
+										"city":			"Pencilsville",
+										"state":		"PA",
 										"zipCode":		"34676",
 										"fuelPrice":	3.1415
 								}
@@ -769,6 +910,17 @@
 			"get": {
 				"summary": "Retrieve all locations",
 				"tags": ["location"],
+				"parameters": [
+					{
+						"name": 		"zipCode",
+						"in": 			"path",
+						"required": 	true,
+						"description":	"Zipcode of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -806,10 +958,10 @@
 					"tags": ["location"],
 					"parameters": [
 						{
-							"name": "id",
-							"in": "path",
-							"required": true,
-							"description": "ID of location to fetch",
+							"name": 		"id",
+							"in": 			"path",
+							"required": 	true,
+							"description":	"ID of location to fetch",
 							"schema": {
 								"type": "integer"
 							}
@@ -860,20 +1012,20 @@
 								"schema": {
 									"type": "object",
 									"properties": {
-										"name":			 { "type": "string" },
+										"name":			{ "type": "string" },
 										"address":		{ "type": "string" },
-										"city":			 { "type": "string" },
-										"state":			{ "type": "string" },
+										"city":			{ "type": "string" },
+										"state":		{ "type": "string" },
 										"zipCode":		{ "type": "string" },
 										"fuelPrice":	{ "type": "number" }
 									},
 									"example": {
-										"name":			 "Home",
-										"address":		"123 Sharpp Rd.",
-										"city":			 "Pencilsville",
-										"state":			"PA",
-										"zipCode":		"34676",
-										"fuelPrice":	3.1415
+										"name":		"Home",
+										"address":	"123 Sharpp Rd.",
+										"city":		"Pencilsville",
+										"state":	"PA",
+										"zipCode":	"34676",
+										"fuelPrice": 3.1415
 									}
 								}
 							}
@@ -918,11 +1070,11 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"date":			       { "type": "object" },
-									"time":			       { "type": "object" },
+									"date":			  { "type": "object" },
+									"time":			  { "type": "object" },
 									"distance":       { "type": "number" },
-									"fee":			      { "type": "number" },
-									"vehicleId":	    { "type": "integer" },
+									"fee":			  { "type": "number" },
+									"vehicleId":	  { "type": "integer" },
 									"fromLocationId": { "type": "integer" },
 									"toLocationId":	  { "type": "integer" }
 								},
@@ -966,7 +1118,7 @@
 				}
 			},
 			"get": {
-				"summary": "Retrieve all vehicles",
+				"summary": "Retrieve all vehicles, location details included",
 				"tags": ["ride"],
 				"responses": {
 					"200": {
@@ -1001,7 +1153,7 @@
 		"/rides/{id}": {
 			"summary": "Operations on a single ride",
             "get": {
-                "summary": "Get ride by ID",
+                "summary": "Get ride by ID, location details included",
                 "tags": ["ride"],
                 "parameters": [
                     {
@@ -1130,6 +1282,240 @@
 								},
 								"example": {
 									"message": "No such ride ID"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}/rides/{rideId}": {
+			"summary": "Operations on a user-ride many-to-many table",
+			"post": {
+				"summary": "Create a new user-ride relation.",
+				"description": "Each User can have a connection with one or more rides, and this facilitates those connections.",
+				"tags": ["user-ride"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/User-Ride"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "New user-ride relation created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/User-Ride"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "New user-ride creation attempt failed",
+						"content": {
+								"application/json": {
+									"schema": {
+										"$ref": "#/components/schemas/Error"
+									},
+									"example": {
+										"message": "Requested resource not found"
+									}
+								}
+							}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete an existing user-ride relationship",
+				"tags": ["user-ride"],
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					},
+					{
+						"name": "rideId",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User-ride deleted"
+					},
+					"404": {
+      			"description": "Can't delete user-ride",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such user-ride"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/drivers/{driverId}/vehicles/{vehicleId}": {
+			"summary": "Operations on a driver-vehicle many-to-many table",
+			"post": {
+				"summary": "Create a new driver-vehicle relation.",
+				"description": "Each Driver has a connection with some vehicle, and this facilitates that connection.",
+				"tags": ["driver-vehicle"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Driver-Vehicle"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "New driver-vehicle relation created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Driver-Vehicle"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "New driver-vehicle creation attempt failed",
+						"content": {
+								"application/json": {
+									"schema": {
+										"$ref": "#/components/schemas/Error"
+									},
+									"example": {
+										"message": "Requested resource not found"
+									}
+								}
+							}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete an existing driver-vehicle relationship",
+				"tags": ["driver-vehicle"],
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					},
+					{
+						"name": "rideId",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Driver-vehicle deleted"
+					},
+					"404": {
+      			"description": "Can't delete driver-vehicle",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such driver-vehicle"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/drivers/{driverId}/rides/{rideId}": {
+			"summary": "Operations on a driver-ride many-to-many table",
+			"post": {
+				"summary": "Create a new driver-ride relation.",
+				"description": "Each Driver can have a connection with one or more rides, and this facilitates those connections.",
+				"tags": ["driver-ride"],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Driver-Ride"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "New driver-ride relation created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Driver-Ride"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "New driver-ride creation attempt failed",
+						"content": {
+								"application/json": {
+									"schema": {
+										"$ref": "#/components/schemas/Error"
+									},
+									"example": {
+										"message": "Requested resource not found"
+									}
+								}
+							}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete an existing driver-ride relationship",
+				"tags": ["driver-ride"],
+				"parameters": [
+					{
+						"name": "driverId",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					},
+					{
+						"name": "rideId",
+						"in": "path",
+						"schema": { "type": "integer" },
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Driver-ride deleted"
+					},
+					"404": {
+      			"description": "Can't delete driver-ride",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such driver-ride"
 								}
 							}
 						}
