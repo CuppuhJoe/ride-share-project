@@ -89,16 +89,16 @@
 					"vehicleId":		{ "type": "integer" },
 					"fromLocation":		{ 	"type": "object",
 											"properties":{
-												"$ref": "#/componants/schemas/Location"
+												"$ref": "#/components/schemas/Location"
 											},
 										 	"required": false
 										},
 					"toLocation":		{ 	"type": "object",
 											"properties":{
-												"$ref": "#/componants/schemas/Location"
+												"$ref": "#/components/schemas/Location"
 											},
 										 	"required": false
-										},
+										}
 				},
 				"example": {
 					"id": 2,
@@ -175,12 +175,12 @@
 				"description": "A driver's connection to a given vehicle",
 				"type": "object",
 				"properties": {
-					"driverId":				{ "type": "integer" },
-					"vehicleId":				{ "type": "integer" }
+					"driverId":			{ "type": "integer" },
+					"vehicleId":		{ "type": "integer" }
 				},
 				"example": {
-					"driverId": 3,
-					"vehicleId": 3
+					"driverId": 	3,
+					"vehicleId": 	3
 				}
 			},
 			"Driver-Ride": {
@@ -921,12 +921,47 @@
 				"summary": "Retrieve all locations",
 				"tags": ["location"],
 				"parameters": [
-					//add default param
+					{
+						"name": "name",
+						"in":  "query",
+						"required": false,
+						"description": "name of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "address",
+						"in":  "query",
+						"required": false,
+						"description": "address of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "city",
+						"in":  "query",
+						"required": false,
+						"description": "city of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "state",
+						"in":  "query",
+						"required": false,
+						"description": "state of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					},
 					{
 						"name": "zipCode",
 						"in":  "query",
 						"required": false,
-						"description": "Zipcode of location to fetch",
+						"description": "zipCode of location to fetch",
 						"schema": {
 							"type": "string"
 						}
@@ -1013,6 +1048,51 @@
 							"in": "path",
 							"schema": { "type": "integer" },
 							"required": true
+						},
+						{
+							"name": "name",
+							"in":  "query",
+							"required": false,
+							"description": "name of location to fetch",
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"name": "address",
+							"in":  "query",
+							"required": false,
+							"description": "address of location to fetch",
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"name": "city",
+							"in":  "query",
+							"required": false,
+							"description": "city of location to fetch",
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"name": "state",
+							"in":  "query",
+							"required": false,
+							"description": "state of location to fetch",
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"name": "zipCode",
+							"in":  "query",
+							"required": false,
+							"description": "zipCode of location to fetch",
+							"schema": {
+								"type": "string"
+							}
 						}
 					],
 					"requestBody": {
@@ -1081,22 +1161,22 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"date":			  { "type": "object" },
-									"time":			  { "type": "object" },
-									"distance":       { "type": "number" },
-									"fee":			  { "type": "number" },
-									"vehicleId":	  { "type": "integer" },
-									"fromLocationId": { "type": "integer" },
-									"toLocationId":	  { "type": "integer" }
+									"date":			{ "type": "object" },
+									"time":			{ "type": "object" },
+									"distance":     { "type": "number" },
+									"fee":			{ "type": "number" },
+									"vehicleId":	{ "type": "integer" },
+									"fromLocation": { "type": "object" },
+									"toLocationId":	{ "type": "integer" }
 								},
 								"example": {
-									"date": "11-11-2011",
-									"time": "11:11PM",
-									"distance": 111.11,
-									"fee": 0.0,
-									"vehicleId": 74,
-									"fromLocationId": 6,
-									"toLocationId": 7
+									"date": 			"11-11-2011",
+									"time": 			"11:11PM",
+									"distance": 		111.11,
+									"fee": 				0.0,
+									"vehicleId": 		74,
+									"fromLocationId": 	6,
+									"toLocationId": 	7
 								}
 							}
 						}
@@ -1180,7 +1260,16 @@
 						"name": "from",
 						"in": "query",
                         "required": false,
-                        "description": "return also the fromLocation information",
+                        "description": "return the fromLocation information too",
+                        "schema": {
+                            "type": "boolean"
+                        }
+					},
+					{
+						"name": "to",
+						"in": "query",
+                        "required": false,
+                        "description": "return the toLocation information too",
                         "schema": {
                             "type": "boolean"
                         }
@@ -1209,8 +1298,8 @@
                             }
                         }
                     }
-                }
-                }
+                	}
+				}
             },
 			"patch": {
 				"summary": "Update an existing ride",
@@ -1236,8 +1325,8 @@
             			"distance":			{ "type": "number" },
             			"fee":				{ "type": "number" },
             			"vehicleId":		{ "type": "integer" },
-            			"fromLocationId":	{ "type": "integer" },
-            			"toLocationId":		{ "type": "integer" }
+            			"fromLocation":		{ "type": "integer" },
+            			"toLocation":		{ "type": "integer" }
 								},
 								"example": {
 			            "date":              "11-11-2011",

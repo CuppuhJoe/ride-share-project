@@ -15,8 +15,7 @@
 
   Rides
   1. Add, remove User as passenger on Ride.
-//  2. Retrieve one Ride or all Rides.
-//  3. Include details of from and to Location.
+  3. GET details of from and to Location (for all Rides or one Ride).
     Optionally include:
         (a)Drivers per Ride
         (b)Passengers per Ride
@@ -26,8 +25,6 @@
       Optionally include:
           (a) Rides from Location
           (b) Rides to Location
-  3. Search for Locations that match any combination of name, address, city,
-  state, or zip.
 
 
 2  Guidelines
