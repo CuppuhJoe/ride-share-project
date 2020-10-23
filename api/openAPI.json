@@ -107,8 +107,24 @@
 					"distance": 111.11,
 					"fee": 0.0,
 					"vehicleId": 74,
-					"fromLocationId": 6,
-					"toLocationId": 7
+					"fromLocation": {
+										"id":		 5,
+										"name":		 "Home",
+										"address":	 "123 Sharpp Rd.",
+										"city":		 "Pencilsville",
+										"state":	 "PA",
+										"zipCode":	 "34676",
+										"fuelPrice": 3.1415
+									},
+					"toLocation": {
+										"id":		 6,
+										"name":		 "Shool",
+										"address":	 "123 Sharpp Rd.",
+										"city":		 "Pencilsville",
+										"state":	 "PA",
+										"zipCode":	 "34676",
+										"fuelPrice": 3.1415
+									}
 				}
 			},
 			"Vehicle": {
@@ -1160,6 +1176,7 @@
 						"application/json": {
 							"schema": {
 								"type": "object",
+								<!-- yeet -->
 								"properties": {
 									"date":			{ "type": "object" },
 									"time":			{ "type": "object" },
@@ -1167,7 +1184,7 @@
 									"fee":			{ "type": "number" },
 									"vehicleId":	{ "type": "integer" },
 									"fromLocation": { "type": "object" },
-									"toLocationId":	{ "type": "integer" }
+									"toLocation":	{ "type": "object" }
 								},
 								"example": {
 									"date": 			"11-11-2011",
@@ -1175,8 +1192,24 @@
 									"distance": 		111.11,
 									"fee": 				0.0,
 									"vehicleId": 		74,
-									"fromLocationId": 	6,
-									"toLocationId": 	7
+									"fromLocation": {
+														"id":		 5,
+														"name":		 "Home",
+														"address":	 "123 Sharpp Rd.",
+														"city":		 "Pencilsville",
+														"state":	 "PA",
+														"zipCode":	 "34676",
+														"fuelPrice": 3.1415
+													},
+									"toLocation": {
+														"id":		 6,
+														"name":		 "Shool",
+														"address":	 "123 Sharpp Rd.",
+														"city":		 "Pencilsville",
+														"state":	 "PA",
+														"zipCode":	 "34676",
+														"fuelPrice": 3.1415
+													}
 								}
 							}
 						}
@@ -1209,8 +1242,37 @@
 				}
 			},
 			"get": {
-				"summary": "Retrieve all vehicles, location details included",
+				"summary": "Retrieve all vehicles, location details optionally included",
 				"tags": ["ride"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"description": "ID of ride to fetch",
+						"schema": {
+								"type": "integer"
+						}
+					},
+					{
+						"name": "from",
+						"in": "query",
+						"required": false,
+						"description": "return the fromLocation information too",
+						"schema": {
+						"type": "boolean"
+						}
+					},
+					{
+						"name": "to",
+						"in": "query",
+						"required": false,
+						"description": "return the toLocation information too",
+						"schema": {
+								"type": "boolean"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -1320,22 +1382,38 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-            			"date":				{ "type": "object" },
-            			"time":				{ "type": "object" },
-            			"distance":			{ "type": "number" },
-            			"fee":				{ "type": "number" },
-            			"vehicleId":		{ "type": "integer" },
-            			"fromLocation":		{ "type": "integer" },
-            			"toLocation":		{ "type": "integer" }
+									"date":				{ "type": "object" },
+									"time":				{ "type": "object" },
+									"distance":			{ "type": "number" },
+									"fee":				{ "type": "number" },
+									"vehicleId":		{ "type": "integer" },
+									"fromLocation":		{ "type": "object" },
+									"toLocation":		{ "type": "object" }
 								},
 								"example": {
-			            "date":              "11-11-2011",
-			            "time":              "11:11PM",
-			            "distance":          111.11,
-			            "fee":               0.0,
-			            "vehicleId":         74,
-			            "fromLocationId":    6,
-			            "toLocationId":      7
+									"date":              "11-11-2011",
+									"time":              "11:11PM",
+									"distance":          111.11,
+									"fee":               0.0,
+									"vehicleId":         74,
+									"fromLocation": {
+										"id":		 5,
+										"name":		 "Home",
+										"address":	 "123 Sharpp Rd.",
+										"city":		 "Pencilsville",
+										"state":	 "PA",
+										"zipCode":	 "34676",
+										"fuelPrice": 3.1415
+									},
+									"toLocation": {
+										"id":		 6,
+										"name":		 "Shool",
+										"address":	 "123 Sharpp Rd.",
+										"city":		 "Pencilsville",
+										"state":	 "PA",
+										"zipCode":	 "34676",
+										"fuelPrice": 3.1415
+									}
 								}
 							}
 						}

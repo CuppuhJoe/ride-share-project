@@ -1,30 +1,39 @@
 1  Requirements
 
+//set a date as yyyy-mm-dd instead of dd-mm-yyyy
+
   Users
 //  1. Retrieve one User or all Users.
       Optionally fetch any combination of:
           (a) Authorized Vehicles
-          (b)Rides driven by User
-          (c)Rides on which User is a passenger
+                (Should be accessed via Driver-Vehicle)
+          (b) Rides driven by User
+                (Should be accessed via Driver-Ride)
+          (c) Rides on which User is a passenger
+                (Should be accessed via User-Ride)
 
   Vehicles and Types
 //  1. Retrieve one Vehicle or all Vehicles.
       Optionally include:
-          (a)Drivers authorized to drive Vehicle.
-          (b)Rides assigned to this Vehicle.
+          (a) Drivers authorized to drive Vehicle.
+                (Should be accessed via Driver-Vehicle)
+          (b) Rides assigned to this Vehicle.
+                (Should be accessed via Vehicle-Ride)
 
   Rides
   1. Add, remove User as passenger on Ride.
   3. GET details of from and to Location (for all Rides or one Ride).
     Optionally include:
-        (a)Drivers per Ride
-        (b)Passengers per Ride
+        (a) Drivers per Ride
+              (Should be accessed via Driver-Ride)
+        (b) Passengers per Ride
+              (Should be accessed via User-Ride)
 
-  Locations
+//  Locations
 //  1. Retrieve one Location or all Locations.
-      Optionally include:
-          (a) Rides from Location
-          (b) Rides to Location
+//      Optionally include:
+//          (a) Rides from Location
+//          (b) Rides to Location
 
 
 2  Guidelines
