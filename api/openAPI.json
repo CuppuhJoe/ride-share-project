@@ -251,15 +251,6 @@
 				"tags": ["user"],
 				"parameters": [
 					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "ID of user to fetch",
-						"schema": {
-							"type": "integer"
-						}
-					},
-					{
 						"name": "authorized-vehicles",
 						"in": "query",
 						"required": false,
@@ -272,7 +263,7 @@
 						"name": "rides-driven",
 						"in": "query",
 						"required": false,
-						"description": "return the information on which rides the user is driving too",
+						"description": "return which rides the user is driving too",
 						"schema": {
 							"type": "boolean"
 						}
@@ -281,7 +272,7 @@
 						"name": "rides-ridden",
 						"in": "query",
 						"required": false,
-						"description": "return the information on which rides the user is a passenger on too",
+						"description": "return which rides the user is a passenger on too",
 						"schema": {
 							"type": "boolean"
 						}
@@ -573,6 +564,26 @@
 			"get": {
 				"summary": "Retrieve all vehicles",
 				"tags": ["vehicle"],
+				"parameters":[
+					{
+						"name": "drivers",
+						"in": "query",
+						"required": false,
+						"description": "return which drivers are authorized to use this vehicle too",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "rides",
+						"in": "query",
+						"required": false,
+						"description": "return which rides are using this vehicle too",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -595,6 +606,26 @@
 			"get": {
 				"summary": "Retrieve one specific vehicle",
 				"tags": ["vehicle"],
+				"parameters":[
+					{
+						"name": "drivers",
+						"in": "query",
+						"required": false,
+						"description": "return which drivers are authorized to use this vehicle too",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "rides",
+						"in": "query",
+						"required": false,
+						"description": "return which rides are using this vehicle too",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -1340,15 +1371,6 @@
 				"tags": ["ride"],
 				"parameters": [
 					{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"description": "ID of ride to fetch",
-						"schema": {
-								"type": "integer"
-						}
-					},
-					{
 						"name": "from",
 						"in": "query",
 						"required": false,
@@ -1362,6 +1384,24 @@
 						"in": "query",
 						"required": false,
 						"description": "return the toLocation information too",
+						"schema": {
+								"type": "boolean"
+						}
+					},
+					{
+						"name": "drivers",
+						"in": "query",
+						"required": false,
+						"description": "return which Drivers are in the Ride too",
+						"schema": {
+								"type": "boolean"
+						}
+					},
+					{
+						"name": "passengers",
+						"in": "query",
+						"required": false,
+						"description": "return which Passengers are in the Ride too",
 						"schema": {
 								"type": "boolean"
 						}
@@ -1466,6 +1506,15 @@
 						"in": "path",
 						"schema": { "type": "integer" },
 						"required": true
+					},
+					{
+						"name": "delete-user",
+						"in": "query",
+						"required": false,
+						"description": "ID of user to delete",
+						"schema": {
+						"type": "integer"
+						}
 					}
 				],
 				"requestBody": {
@@ -1533,6 +1582,19 @@
 								},
 								"example": {
 									"message": "No such ride ID"
+								}
+							}
+						}
+					},
+					"404": {
+            			"description": "No such user ID",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								},
+								"example": {
+									"message": "No such user ID"
 								}
 							}
 						}
