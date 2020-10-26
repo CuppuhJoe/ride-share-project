@@ -128,6 +128,18 @@
 												"$ref": "#/components/schemas/Location"
 											},
 										 	"required": false
+										},
+					"driver": 			{ 	"type": "object",
+											"properties":{
+												"$ref": "#/components/schemas/Driver"
+											},
+											"required": false
+										},
+					"passenger": 		{ 	"type": "object",
+											"properties":{
+												"$ref": "#/components/schemas/User"
+											},
+											"required": false
 										}
 				},
 				"example": {
@@ -154,7 +166,22 @@
 										"state":	 "PA",
 										"zipCode":	 "34676",
 										"fuelPrice": 3.1415
-									}
+									},
+					"driver": {
+										"id": 89,
+										"userId": 42,
+										"licenseNumber": 1019,
+										"licenseState": "MI"
+					},
+					"passenger": {
+										"id":			42,
+										"firstName":	"Fred",
+										"lastName":	    "Ziffle",
+										"email":		"fred@example.com",
+										"password":	    "super-secret-thing",
+										"phone":		"765-555-1212",
+										"isAdmin":		false
+					}
 				}
 			},
 			"Vehicle": {
@@ -193,7 +220,19 @@
 							"city":		 { "type": "string" },
 							"state":	 { "type": "string" },
 							"zipCode":	 { "type": "string" },
-							"fuelPrice": { "type": "number" }
+							"fuelPrice": { "type": "number" },
+							"ridesFrom": { 	"type": "object",
+										"properties":{
+											"$ref": "#/components/schemas/Ride"
+										},
+										"required": false
+							},
+							"ridesTo": { "type": "object",
+										"properties":{
+											"$ref": "#/components/schemas/Ride"
+										},
+										"required": false
+									}
 					},
 					"example": {
 							"id":		 5,
@@ -202,7 +241,23 @@
 							"city":		 "Pencilsville",
 							"state":	 "PA",
 							"zipCode":	 "34676",
-							"fuelPrice": 3.1415
+							"fuelPrice": 3.1415,
+							"ridesFrom": {
+								"id": 2,
+								"date": "2011-11-11",
+								"time": "11:11PM",
+								"distance": 111.11,
+								"fee": 0.0,
+								"vehicleId": 74
+							},
+							"ridesTo": {
+								"id": 2,
+								"date": "2011-11-11",
+								"time": "11:11PM",
+								"distance": 111.11,
+								"fee": 0.0,
+								"vehicleId": 74
+							}
 					}
 				},
 			"User-Ride": {
@@ -1107,6 +1162,24 @@
 						"schema": {
 							"type": "string"
 						}
+					},
+					{
+						"name": "ridesFrom",
+						"in": "query",
+						"required": false,
+						"description": "return the information on rides from this location too",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "ridesTo",
+						"in": "query",
+						"required": false,
+						"description": "return the information on rides to this location too",
+						"schema": {
+							"type": "boolean"
+						}
 					}
 				],
 				"responses": {
@@ -1144,17 +1217,72 @@
 				"get": {
 					"summary": "Get location by ID",
 					"tags": ["location"],
-					"parameters": [
-						{
-							"name": 		"id",
-							"in": 			"path",
-							"required": 	true,
-							"description":	"ID of location to fetch",
-							"schema": {
-								"type": "integer"
-							}
+					
+				"parameters": [
+					{
+						"name": "name",
+						"in":  "query",
+						"required": false,
+						"description": "name of location to fetch",
+						"schema": {
+							"type": "string"
 						}
-					],
+					},
+					{
+						"name": "address",
+						"in":  "query",
+						"required": false,
+						"description": "address of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "city",
+						"in":  "query",
+						"required": false,
+						"description": "city of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "state",
+						"in":  "query",
+						"required": false,
+						"description": "state of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "zipCode",
+						"in":  "query",
+						"required": false,
+						"description": "zipCode of location to fetch",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "ridesFrom",
+						"in": "query",
+						"required": false,
+						"description": "return the information on rides from this location too",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "ridesTo",
+						"in": "query",
+						"required": false,
+						"description": "return the information on rides to this location too",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
 					"responses": {
 						"200": {
 							"description": "Successfully retrieved",
@@ -1469,6 +1597,24 @@
                         "schema": {
                             "type": "boolean"
                         }
+					},
+					{
+						"name": "drivers",
+						"in": "query",
+						"required": false,
+						"description": "return which Drivers are in the Ride too",
+						"schema": {
+								"type": "boolean"
+						}
+					},
+					{
+						"name": "passengers",
+						"in": "query",
+						"required": false,
+						"description": "return which Passengers are in the Ride too",
+						"schema": {
+								"type": "boolean"
+						}
 					}
                 ],
                 "responses": {

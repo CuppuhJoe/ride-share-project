@@ -1,8 +1,6 @@
 1  Requirements
 
   Users
-  **Should GET /users have an id parameter? We aren't asking for a specific instance.**
-  ***No, it shouldn't--I've gone ahead and removed it.***
 //  1. Retrieve one User or all Users.
 //      Optionally fetch any combination of:
 //          (a) Authorized Vehicles
@@ -21,8 +19,6 @@
                 (Should be accessed via Vehicle-Ride)
 
   Rides
-  **Should GET /rides have an id parameter? We aren't asking for a specific instance.**
-  ***Same as before--I've gone ahead and removed it.***
 //  1. Add, remove User as passenger on Ride.
 //  3. GET details of from and to Location (for all Rides or one Ride).
 //    Optionally include:
