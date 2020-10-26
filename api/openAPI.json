@@ -37,7 +37,25 @@
 					"email":		{ "type": "string" },
 					"password":	    { "type": "string" },
 					"phone":		{ "type": "string" },
-					"isAdmin":		{ "type": "boolean" }
+					"isAdmin":		{ "type": "boolean" },
+					"authorized-vehicles":		{ 	"type": "object",
+											"properties":{
+												"$ref": "#/components/schemas/Driver-Vehicle"
+											},
+										 	"required": false
+										},
+					"rides-driven":		{ 	"type": "object",
+											"properties":{
+												"$ref": "#/components/schemas/Driver-Ride"
+											},
+										 	"required": false
+										},
+					"rides-ridden":		{ 	"type": "object",
+											"properties":{
+												"$ref": "#/components/schemas/User-Ride"
+											},
+												"required": false
+										}
 				},
 				"example": {
 					"id":			42,
@@ -46,7 +64,19 @@
 					"email":		"fred@example.com",
 					"password":	    "super-secret-thing",
 					"phone":		"765-555-1212",
-					"isAdmin":		false
+					"isAdmin":		false,
+					"authorized-vehicles": {
+						"driverId": 	3,
+						"vehicleId": 	3
+					},
+					"rides-driven": {
+						"driverId": 4,
+						"rideId": 4
+					},
+					"rides-ridden": {
+						"userId": 2,
+						"rideId": 2
+					}
 				}
 			},
 			"VehicleType": {
@@ -102,7 +132,7 @@
 				},
 				"example": {
 					"id": 2,
-					"date": "11-11-2011",
+					"date": "2011-11-11",
 					"time": "11:11PM",
 					"distance": 111.11,
 					"fee": 0.0,
@@ -219,6 +249,44 @@
 			"get": {
 				"summary": "Get all users",
 				"tags": ["user"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"description": "ID of user to fetch",
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "authorized-vehicles",
+						"in": "query",
+						"required": false,
+						"description": "return the vehicle authorization information too",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "rides-driven",
+						"in": "query",
+						"required": false,
+						"description": "return the information on which rides the user is driving too",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "rides-ridden",
+						"in": "query",
+						"required": false,
+						"description": "return the information on which rides the user is a passenger on too",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "All users fetched successfully",
@@ -333,6 +401,33 @@
 						"description": "ID of user to fetch",
 						"schema": {
 							"type": "integer"
+						}
+					},
+					{
+						"name": "authorized-vehicles",
+						"in": "query",
+						"required": false,
+						"description": "return the vehicle authorization information too",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "rides-driven",
+						"in": "query",
+						"required": false,
+						"description": "return the information on which rides the user is driving too",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "rides-ridden",
+						"in": "query",
+						"required": false,
+						"description": "return the information on which rides the user is a passenger on too",
+						"schema": {
+							"type": "boolean"
 						}
 					}
 				],
@@ -1176,7 +1271,6 @@
 						"application/json": {
 							"schema": {
 								"type": "object",
-								<!-- yeet -->
 								"properties": {
 									"date":			{ "type": "object" },
 									"time":			{ "type": "object" },
@@ -1187,7 +1281,7 @@
 									"toLocation":	{ "type": "object" }
 								},
 								"example": {
-									"date": 			"11-11-2011",
+									"date": 			"2011-11-11",
 									"time": 			"11:11PM",
 									"distance": 		111.11,
 									"fee": 				0.0,
@@ -1391,7 +1485,7 @@
 									"toLocation":		{ "type": "object" }
 								},
 								"example": {
-									"date":              "11-11-2011",
+									"date":              "2011-11-11",
 									"time":              "11:11PM",
 									"distance":          111.11,
 									"fee":               0.0,
