@@ -1,10 +1,16 @@
-require("../api/db");
+require("../db");
 
 // Load model classes.
-const Company = require("./models/Company");
-const Patient = require("./models/Patient");
-const Vaccination = require("./models/Vaccination");
-const Vaccine = require("./models/Vaccine");
+const Authorization = require("../api/models/Authorization.js");
+const Driver = require("../api/models/Driver.js");
+const Drivers = require("../api/models/Drivers.js");
+const Location = require("../api/models/Location.js");
+const Passenger = require("../api/models/Passenger.js");
+const Ride = require("../api/models/Ride.js");
+const State = require("../api/models/State.js");
+const User = require("../api/models/User.js");
+const Vehicle_Type = require("../api/models/Vehicle_Type.js");
+const Vehicle = require("../api/models/Vehicle.js");
 
 // Configure Hapi.
 const Hapi = require("@hapi/hapi");
@@ -32,56 +38,21 @@ const init = async () => {
       method: "GET",
       path: "/",
       handler: (request, h) => {
-        return "Hello, you have reached 'hapi-server'. Please leave a message after the beep.";
-      },
-    },
-
-    {
-      method: "GET", // Get company collection
-      path: "/companies",
-      handler: async (request, h) => {
-        return await Company.getAllCompanies();
-      },
-    },
-
-    {
-      method: "GET", // Get vaccine collection
-      path: "/vaccines",
-      handler: async (request, h) => {
-        //Below is a very helpful method. Take note of it. Remember it. Treasure it.
-        return Vaccine.query().withGraphFetched("company");
+        return "Hello, you have reached Free Rides Only. Please do our work after the tone. BEEP";
       },
     },
 
     {
       method: "GET", // Get patient collection
-      path: "/patients",
-      options: {
-        validate: {
-          query: Joi.object({
-            verbose: Joi.boolean(),
-            sortby: Joi.string().valid("first", "last")
-          })
-        }
-      },
+      path: "/users",
       handler: async (request, h) => {
-        let verbose = request.query.verbose;
-        let sortby = request.query.sortby;
-
-        let patients;
-        if (verbose)  patients = Patient.query().withGraphFetched("vaccines");
-        else          patients = Patient.query();
-
-        if (sortby === "last")        patients.orderBy("last_name");
-        else if (sortby === "first")  patients.orderBy("first_name");
-
-        return patients;
+        return User.query();
       },
     },
 
     {
       method: "GET",
-      path: "/patients/{id}",
+      path: "/users/{id}",
       options: {
         validate: {
           params: Joi.object({
@@ -90,76 +61,42 @@ const init = async () => {
         }
       },
       handler: async (request, h) => {
-        let patient = await Patient.query()
+        let user = await User.query()
           .where("id", request.params.id)
-          .withGraphFetched("vaccines")
           .first();
-        console.log("MATCHES", patient);
-        if (patient) return patient;
-        return Boom.notFound(`No patient with ID ${request.params.id}`);
+        if (user) return user;
+        return Boom.notFound(`No user with ID ${request.params.id}`);
       },
     },
 
     {
-      method: "GET",
-      path: "/companies/{id}",
-      options: {
-        validate: {
-          params: Joi.object({
-            id: Joi.number().integer().min(1)
-          })
-        }
-      },
-      handler: async (request, h) => {
-        let company = await Company.getCompanyById(request.params.id);
-        if (company) return company;
-        return Boom.notFound(`No company with ID ${request.params.id}`);
-      },
-    },
-
-    {
-      method: "POST", // Create new patient
-      path: "/patients",
+      method: "POST", // Create new user
+      path: "/users",
       options: {
         validate: {
           payload: Joi.object({
-            first_name: Joi.string().min(1).max(140).required(),
-            last_name: Joi.string().min(1).max(140).required(),
-            phone: Joi.string().pattern(/^\d{3}-?\d{3}-?\d{4}$/).required()
-          })
+            firstName: Joi.string().min(1).max(140).required(),
+            lastName: Joi.string().min(1).max(140).required(),
+            email: Joi.string().email().min(1).max(140).required(),
+            password: Joi.string().min(1).max(140).required(),
+            phone: Joi.string().pattern(/^\d{3}-?\d{3}-?\d{4}$/).required(),
+            isAdmin: Joi.boolean().required()
         }
       },
       handler: async (request, h) => {
-        let patient = await Patient.create(
-          request.payload.first_name,
-          request.payload.last_name,
-          request.payload.phone
-        );
-        if (patient) return h.response(patient).code(201)
-        return Boom.badRequest(`Could not create patient with ID ${request.params.id}`);
+        let user = await User.query().insert( {
+          firstName: request.payload.firstName,
+          lastName: request.payload.lastName,
+          email: request.payload.email,
+          password: request.payload.password,
+          phone: request.payload.phone,
+          isAdmin: request.payload.isAdmin,
+        });
+        if (user) return h.response(user).code(201);
+        return Boom.badRequest(`Could not create user with ID ${request.params.id}`);
       },
     },
-
-    {
-      method: "POST", // Create new company
-      path: "/companies",
-      options: {
-        validate: {
-          payload: Joi.object({
-            name: Joi.string().min(1).max(140).required(),
-            city: Joi.string().min(1).max(140).required(),
-            country: Joi.string().min(1).max(140).required()
-          })
-        }
-      },
-      handler: async (request, h) => {
-        // let company = await Company.create( request.payload.name, request.payload.city, request.payload.country );
-        let company = await Company.query().insert( {name: request.payload.name, city: request.payload.city, country: request.payload.country});
-        if (company) return h.response(company).code(201)
-        return Boom.badRequest(`Could not create company with ID ${request.params.id}`);
-      },
-    },
-
+/*
     {
       method: "POST", // Create new vaccination record.
       path: "/patients/{pid}/vaccines/{vid}",
@@ -184,62 +121,35 @@ const init = async () => {
         return h.response(response).code(201)
       },
     },
-
+*/
     {
       method: "PATCH", // Update patient by id
-      path: "/patients/{id}",
+      path: "/users/{id}",
       options: {
         validate: {
           params: Joi.object({
             id: Joi.number().integer().min(1)
           }),
           payload: Joi.object({
-            first_name: Joi.string().min(1).max(140),
-            last_name: Joi.string().min(1).max(140),
-            phone: Joi.string().pattern(/^\d{3}-?\d{3}-?\d{4}$/)
+            firstName: Joi.string().min(1).max(140).required(),
+            lastName: Joi.string().min(1).max(140).required(),
+            email: Joi.string().email().min(1).max(140).required(),
+            password: Joi.string().min(1).max(140).required(),
+            phone: Joi.string().pattern(/^\d{3}-?\d{3}-?\d{4}$/).required(),
+            isAdmin: Joi.boolean().required()
           })
         }
       },
       handler: async (request, h) => {
-        //NOTE Should actually return just a response code, not payload content
-        let patient = await Patient.update(
-          request.params.id,
-          request.payload.first_name,
-          request.payload.last_name,
-          request.payload.phone
-        );
-        if (patient) return patient;
-        return Boom.notFound(`No patient with ID ${request.params.id}`);
+        //NOTE Should (does?) actually return just a response code, not payload content
+        let user = await Patient.query()
+            .findById(request.params.id)
+            .patch(request.payload);
+        if (user) return user;
+        return Boom.notFound(`No user with ID ${request.params.id}`);
       },
     },
-
-    {
-      method: "PATCH", // Update company by id
-      path: "/companies/{id}",
-      options: {
-        validate: {
-          params: Joi.object({
-            id: Joi.number().integer().min(1)
-          }),
-          payload: Joi.object({
-            name: Joi.string().min(1).max(140),
-            city: Joi.string().min(1).max(140),
-            country: Joi.string().min(1).max(140)
-          })
-        }
-      },
-      handler: async (request, h) => {
-        let company = await Company.update(
-            request.params.id,
-            request.payload.name,
-            request.payload.city,
-            request.payload.country
-        );
-        if (company) return company;
-        return Boom.notFound(`No company with ID ${request.params.id}`);
-      },
-    },
-
+/*
     {
       method: "DELETE", // Delete a vaccination record.
       path: "/patients/{pid}/vaccines/{vid}",
@@ -260,7 +170,7 @@ const init = async () => {
         if (deletedCount === 0) return Boom.notFound(`No such Vaccination`);
         return h.response("Patient successfully deleted.").code(200)
       }
-    }
+    }*/
   ]);
 
   console.log("Server listening on", server.info.uri);
