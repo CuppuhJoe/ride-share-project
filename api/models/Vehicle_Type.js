@@ -1,4 +1,4 @@
-const { knex, Model } = require("../db");
+const { knex, Model } = require("../../db");
 
 class Vehicle_Type extends Model {
   static get tableName() {
