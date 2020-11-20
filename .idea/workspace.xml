@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6a2bc9d4-e519-4d6e-8d0e-80cc07c6e1d5" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1j7SVKJ2RilVTy3QsGzSEsN0ifG" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../.." />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="SwaggerCodegen: JSON-Test" type="SwaggerCodegen">
+      <option name="activeConfigurationType" value="FILE" />
+      <option name="configurationPath" value="" />
+      <option name="customJreEnabled" value="false" />
+      <option name="customTemplatesPath" value="" />
+      <option name="enableDebugLogging" value="false" />
+      <option name="generateToPath" value="" />
+      <option name="generationParameters">
+        <list />
+      </option>
+      <option name="generatorPath" value="" />
+      <option name="jdkPath" value="Default" />
+      <option name="language" value="" />
+      <option name="specificationPath" value="$PROJECT_DIR$/JSON-Test" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="SwaggerCodegen">
+      <option name="activeConfigurationType" value="FILE" />
+      <option name="configurationPath" value="" />
+      <option name="customJreEnabled" value="false" />
+      <option name="customTemplatesPath" value="" />
+      <option name="enableDebugLogging" value="false" />
+      <option name="generateToPath" value="" />
+      <option name="generationParameters">
+        <list />
+      </option>
+      <option name="generatorPath" value="" />
+      <option name="jdkPath" value="Default" />
+      <option name="language" value="" />
+      <option name="specificationPath" value="$PROJECT_DIR$/JSON-Test" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6a2bc9d4-e519-4d6e-8d0e-80cc07c6e1d5" name="Default Changelist" comment="" />
+      <created>1603153658261</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603153658261</updated>
+      <workItem from="1603153659352" duration="175000" />
+      <workItem from="1603153834873" duration="920000" />
+      <workItem from="1603760585905" duration="50000" />
+      <workItem from="1603760820338" duration="86000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.json" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="738" y="357" width="1084" height="710" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603154113409">
+      <screen x="0" y="27" width="2560" height="1345" />
+    </state>
+    <state x="738" y="357" width="1084" height="710" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.2560.1345/2560.0.2560.1440@0.27.2560.1345" timestamp="1603154113409" />
+    <state x="974" y="501" width="602" height="403" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1603153726142">
+      <screen x="0" y="27" width="2560" height="1345" />
+    </state>
+    <state x="974" y="501" width="602" height="403" key="#com.intellij.fileTypes.FileTypeChooser/0.27.2560.1345/2560.0.2560.1440@0.27.2560.1345" timestamp="1603153726142" />
+    <state x="1063" y="457" width="424" height="491" key="FileChooserDialogImpl" timestamp="1603760908615">
+      <screen x="0" y="27" width="2560" height="1345" />
+    </state>
+    <state x="1063" y="457" width="424" height="491" key="FileChooserDialogImpl/0.27.2560.1345/2560.0.2560.1440@0.27.2560.1345" timestamp="1603760908615" />
+    <state x="943" y="332" key="search.everywhere.popup" timestamp="1603153748651">
+      <screen x="0" y="27" width="2560" height="1345" />
+    </state>
+    <state x="943" y="332" key="search.everywhere.popup/0.27.2560.1345/2560.0.2560.1440@0.27.2560.1345" timestamp="1603153748651" />
+  </component>
+</project>

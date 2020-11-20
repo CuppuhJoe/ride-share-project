@@ -1,0 +1,22 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts":{
+    "server:dev":"nodemon ./src/hapi-server.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "knex": "^0.21.6",
+    "objection": "^2.2.3",
+    "@hapi/hapi": "^19.1.1",
+    "@hapi/joi": "^19.1.1",
+    "hapi-pino": "^8.0.0",
+    "blipp": "^4.0.1",
+    "pg": "^8.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}

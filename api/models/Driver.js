@@ -25,6 +25,14 @@ class Driver extends Model {
           to: "Authorization.driverId",
         },
       },
+      drivers: {
+        relation: Model.HasManyRelation,
+        modelClass: Drivers,
+        join: {
+          from: "Driver.id",
+          to: "Drivers.driverId",
+        },
+      },
     };
   }
 
