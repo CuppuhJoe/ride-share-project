@@ -8,6 +8,7 @@ class Driver extends Model {
   static get relationMappings() {
     const User = require("./User.js");
     const Authorization = require("./Authorization.js");
+    const Drivers = require("./Drivers.js");
     return {
       user: {
         relation: Model.BelongsToOneRelation,
